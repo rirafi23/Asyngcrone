@@ -1,102 +1,99 @@
-import React, {Component} from 'react'
-import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native'
-import Props from './Props'
+import React from 'react';
+import {
+    View, 
+    Text,
+    FlatList,
+    StyleSheet,
+    Image,
+    TouchableOpacity
+} from "react-native"
+ 
+import Data from '../DataBase/Data.json' 
 
-class Home extends React.Component{
-    render(){
+
+class Home extends React.Component {
+    state = {
+        Data
+    }
+
+    onButtomDetail=(dataItem) => {
+        this.props.navigation.navigate('Search', {detil: dataItem })
+    }
+    render() {
         return(
+           
             <View style={{flex:1}}>
-            <ScrollView>
-                <View style={Styles.container}>
-                    <Props text='Rizqan News'/>
-                </View>
-            
-            <View style={Styles.StatusPenuh}>
-                <View style={Styles.Status}>
-                    <Image style={Styles.ImgProf} source={require('../image/download.jpg')}/>
-                    <View style={Styles.Status1}>
-                        <Text style={Styles.Status1Text}>News Portal</Text>
-                        <Text style={Styles.Status1Text1}>Sabtu, 31 Agustus 2019</Text>
-                    </View>
-                </View>
-                <View style={Styles.StatusImg}>
-                    <TouchableOpacity
-                     onPress={()=>this.props.navigation.navigate('Berita1')}>
-                    <Image style={Styles.ImgStatus} source={require('../image/images.png')}/>
-                    </TouchableOpacity>
-                </View>
-                    <Text style={Styles.Status1Text2}>Developer React-Native</Text>
-              </View>
-
-              <View style={Styles.StatusPenuh}>
-                <View style={Styles.Status}>
-                    <Image style={Styles.ImgProf} source={require('../image/user.png')}/>
-                    <View style={Styles.Status1}>
-                        <Text style={Styles.Status1Text}>7Situs</Text>
-                        <Text style={Styles.Status1Text1}>Sabtu, 31 Agustus 2019</Text>
-                    </View>
-                </View>
-                <View style={Styles.StatusImg}>
-                    <TouchableOpacity
-                     onPress={()=>this.props.navigation.navigate('Berita2')}>
-                    <Image style={Styles.ImgStatus} source={require('../image/images3.jpeg')}/>
-                    </TouchableOpacity>
-                </View>
-                    <Text style={Styles.Status1Text2}>Developer React-Native</Text>  
-              </View>
-            </ScrollView>
+                <FlatList
+                    data={this.state.Data}
+                    keyExtractor={(index, item) => index.toString()}
+                    renderItem={({ index, item }) => {
+                        return (
+                            
+                            <View>
+                                <TouchableOpacity onPress={() => this.onButtomDetail([`${item.username}`, `${item.location}`, `${item.image}`,`${item.viewers}`, `${item.diskripsi}`, `${item.artikel}`])}>
+                                <View style={styles.ViewOne}>
+                                    <Image source={{ uri: item.image}}  style={styles.ImgProfile} />
+                                    <View style={styles.viewJudul}>
+                                        <Text style={styles.judul}>{item.username}</Text>
+                                        <Text style={styles.location}>{item.location}</Text>
+                                    </View>
+                                </View>
+                                    <View style={styles.viewImages}>
+                                        <Image source={{ uri: item.image}}  style={styles.styleImage} />
+                                    </View>
+                                    <View style={styles.diskripsi}>
+                                        <Text>{item.viewers}</Text>
+                                        <Text>{item.diskripsi}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }}
+                />
             </View>
+
         )
     }
 }
-export default Home;
 
-const Styles = StyleSheet.create({
-    container:{
-        backgroundColor:'blue',
+export default Home
+
+const styles = StyleSheet.create ({
+    ViewOne:{
+    flexDirection:'row',
+    paddingLeft:10,
+    paddingTop:10
+    },
+    judul:{
+        fontSize:18,
+        color:'#000000',
+        paddingLeft:10
+    },
+    viewImages:{
+        justifyContent:'center',
+        alignItems:'center',
+    },
+    styleImage:{
+        height:250,
         width:'100%',
-        height:60,
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    ImgProf:{
-        width:50,
-        height:50,
-        borderRadius:50,
-        
-    },
-    Status:{
-        flexDirection:'row',
-        alignItems:'center',
-        paddingLeft:10
-    },
-    Status1:{
-        paddingLeft:10
-    },
-    ImgStatus:{
-        width: 250,
-        height:150
-    },
-    StatusImg:{
-        justifyContent:'center',
-        alignItems:'center',
-        marginTop:10,
-        marginBottom:10
-    },
-    StatusPenuh:{
-        borderBottomWidth:1,
-        marginTop:10
-    }, 
-    Status1Text:{
-        fontSize:20
-    },
-    Status1Text1:{
-        fontSize:13,
         marginBottom:5
     },
-    Status1Text2:{
-        fontSize:14,
-        marginBottom:5,
+    location:{
+        fontSize:11,
+        marginBottom:20,
         paddingLeft:10
+
+    },
+    diskripsi:{
+        borderBottomWidth:1,
+        borderBottomColor:'green',
+        paddingBottom:10,
+        paddingLeft:10
+
+    },
+    ImgProfile:{
+        width:40,
+        height:40,
+        borderRadius:50
     }
 })

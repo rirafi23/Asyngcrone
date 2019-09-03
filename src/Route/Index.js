@@ -1,41 +1,18 @@
 import React, {Component} from 'react'
 import {Text, View} from 'react-native'
-import { createMaterialTopTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
-import Home from '../Component/Berita1'
-import Kedua from '../Component/Berita2'
-import HomeHome from '../Component/Home'
-import Profile from '../Component/Profile'
+import { createAppContainer, createStackNavigator } from 'react-navigation'
+import Home from '../Component/Home'
+import Kedua from '../Component/inHome'
 
-const AppTabNavigator = createMaterialTopTabNavigator({
-  Beranda1:{
-    screen:HomeHome,
-  },
-    Beranda2:{
-    screen:Profile,
-  }
-})
-const AppPageBeranda = createStackNavigator({
-  rootBeranda:{
-    screen:AppTabNavigator,
-    navigationOptions: ()=>({
-        header: null,
-      }),
-    
-  },
-    Berita1:{
+const AppNavigator = createStackNavigator({
+  HomeScreen:{
     screen:Home,
-    navigationOptions: () => ({
-        title:'Portal News'
-      }),
-    
+    navigationOptions:{
+      title:'News'
+    }
   },
-    Berita2:{
+    Search:{
     screen:Kedua,
-    navigationOptions: () => ({
-        title:'7 Situs Berita'
-      }),
-  }
-})
-
-const Beranda= createAppContainer(AppPageBeranda)
-export default Beranda;
+  },
+});
+export default createAppContainer(AppNavigator);
