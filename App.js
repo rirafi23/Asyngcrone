@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {} from 'react-native'
 
-import Home from './src/Route/Index'
+import Home from './src/Component/inHome'
 
 class App extends React.Component{
   render(){

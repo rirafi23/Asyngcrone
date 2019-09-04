@@ -1,64 +1,105 @@
-import React from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    ScrollView
-} from "react-native"
+import React from 'react'
+import {View, Text, Button, AsyncStorage, StyleSheet, TextInput, Dimensions} from 'react-native'
+
+const {width:WIDTH} = Dimensions
+.get('window')
+
+class inHome extends React.Component{
+    constructor(){
+        super();
+        this.state={
+            name:'',
+            hobby:'',
+            textName:'',
+            textHobby:''
+        };
 
 
+  AsyncStorage.getItem('user', (error, result) => {
+            if (result) {
+                let resultParsed = JSON.parse(result)
+                this.setState({
+                    name: resultParsed.name,
+                    hobby: resultParsed.hobby
+                });
+            }
+        });
+    }
 
-class Search extends React.Component {
-    render() {
-        return (
-            <View >
-                <ScrollView>
-                    <View style={styles.contantainer}>
-                        <Text style={styles.titleArtikel} > {this.props.navigation.state.params.detil[0]}</Text>
-                        <Text style={styles.lokasiPenulis} > {this.props.navigation.state.params.detil[1]}</Text>
-                        <View style={styles.viewImages}>
-                            <Image source={{ uri: this.props.navigation.state.params.detil[2] }} style={styles.ukuranGambar} />
-                        </View>
-                        <Text style={styles.tampilanArtikel} > {this.props.navigation.state.params.detil[4]}</Text>
-                    </View>
-                </ScrollView>
+    saveData() {
+  let name = this.state.textName;
+  let hobby = this.state.textHobby;
+  let data = {
+      name: name,
+      hobby: hobby
+  }
+
+  AsyncStorage.setItem('user', JSON.stringify(data));
+
+  this.setState({
+      name: name,
+      hobby: hobby
+  });
+
+  alert('Data tersimpan');
+}
+
+    render(){
+            return(
+                <View style={{flex:1, paddingLeft:10, paddingRight:10}}>
+                <Text style={Styles.title}>
+                    Biodata Santri Pondok Programmer
+                </Text>
+                <Text style={Styles.Nama}>
+                    Nama :{'\n'}
+                    <Text style={Styles.isiNama}>{this.state.name}</Text>
+                </Text>
+                <Text style={Styles.Nama}>
+                    Hobi : {this.state.hobby}
+                </Text>
+                <View style={{flex:2, justifyContent:'flex-end', marginBottom:20}}>
+                <View style={Styles.ViewTextInput}>
+                <TextInput style={Styles.TextInput}
+                    onChangeText={(textName) => this.setState({textName})}
+                    placeholder='Nama Santri'
+                />
+                <TextInput style={Styles.TextInput}
+                    onChangeText={(textHobby) => this.setState({textHobby})}
+                    placeholder='Hobi Santri'
+                />
+                </View>
+                <Button
+                    title='Simpan'
+                    onPress={this.saveData.bind(this)}
+                />
             </View>
-
-        )
+            </View>
+        );
     }
 }
-const styles = StyleSheet.create({
-    contantainer: {
-        flex: 1,
-        backgroundColor: '#fff',
-        
+export default inHome;
+
+const Styles = StyleSheet.create({
+    title:{
+        fontSize:20,
+        paddingTop:20,
+        marginBottom:15
     },
-    titleArtikel: {
-        fontSize: 22,
-        color: '#000000',
-        paddingLeft:15
+    Nama:{
+        fontSize:18,
+        borderWidth:1,
+        paddingTop:5,
+        paddingBottom:5
     },
-    lokasiPenulis: {
-        fontSize: 12,
-        marginBottom: 20,
-        paddingLeft: 15
+    isiNama:{
+        fontSize:16,
+        paddingTop:10
     },
-    ukuranGambar: {
-        height: 200,
-        width: '80%',
-        marginBottom: 4
+    TextInput:{
+        borderBottomWidth:1,
     },
-    viewImages: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    tampilanArtikel: {
-        fontSize: 15,
-        textAlign: 'auto',
-        paddingLeft:15
+    ViewTextInput:{
+        marginBottom:15,
     }
 
 })
-
-export default Search
